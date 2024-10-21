@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <script>
+        // Function to submit form data via fetch (AJAX)
+        function submitForm(event) {
+            event.preventDefault();
+
+            // Get form data
+            const formData = new FormData(document.getElementById('registerForm'));
+            const firstName = formData.get('firstName');
+            const lastName = formData.get('lastName');
+            const mobile = formData.get('mobile');
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const city = formData.get('city');
+            const state = formData.get('state');
+
+            // Name and city/state validation: only alphabets allowed
+            const nameRegex = /^[a-zA-Z\s]+$/;
+            if (!nameRegex.test(firstName)) {
+                alert('First Name must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+            if (!nameRegex.test(lastName)) {
+                alert('Last Name must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+            if (!nameRegex.test(city)) {
+                alert('City must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+            if (!nameRegex.test(state)) {
+                alert('State must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+
+            // Mobile number validation: must be exactly 10 digits
+            const mobileRegex = /^\d{10}$/;
+            if (!mobileRegex.test(mobile)) {
+                alert('Please enter a valid 10-digit mobile number.');
+                return; // Stop form submission if validation fails
+            }
+
+            // Password validation: allow letters, numbers, and @
+            const passwordRegex = /^[a-zA-Z0-9@]+$/;
+            if (!passwordRegex.test(password)) {
+                alert('Password can only contain letters, numbers, and the @ symbol.');
+                return; // Stop form submission if validation fails
+            }
+
+            // Email validation: must be a valid email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return; // Stop form submission if validation fails
+            }
+
+            // If all validations pass, submit the form
+            const formObj = {};
+            formData.forEach((value, key) => {
+                formObj[key] = value;
+            });
+
+            // Submit form data via fetch
+            fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formObj)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Show confirmation
+            });
+        }
+
+        // Fetch and display registered users
+        function fetchSubmittedUsers() {
+            fetch('/fetch-users')
+                .then(response => response.json())
+                .then(users => {
+                    const usersContainer = document.getElementById('usersContainer');
+                    usersContainer.innerHTML = ''; // Clear previous data
+
+                    if (users.length === 0) {
+                        usersContainer.innerHTML = '<p>No users registered yet.</p>';
+                    } else {
+                        users.forEach((user, index) => {
+                            usersContainer.innerHTML += `
+                                <div>
+                                    <h4>User ${index + 1}</h4>
+                                    <p><strong>First Name:</strong> ${user.firstName}</p>
+                                    <p><strong>Last Name:</strong> ${user.lastName}</p>
+                                    <p><strong>Mobile:</strong> ${user.mobile}</p>
+                                    <p><strong>Email:</strong> ${user.email}</p>
+                                    <p><strong>City:</strong> ${user.city}</p>
+                                    <p><strong>State:</strong> ${user.state}</p>
+                                </div><hr>`;
+                        });
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <style>
+        h2{
+            text-align: center;
+            color: blueviolet;
+
+        }
+        label{
+            display: block;
+            color:blueviolet;
+        }
+        button{
+            background-color: blueviolet;
+        }
+        h3{
+            color:blueviolet;
+            font-style:bold ;
+        }
+        body{
+            background-color: bisque;
+        }
+    </style>
+
+    <h2>Registration Form</h2>
+    <form id="registerForm" onsubmit="submitForm(event)">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required><br><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required><br><br>
+
+        <label for="mobile">Mobile No:</label>
+        <input type="text" id="mobile" name="mobile" required><br><br>
+
+        <label for="email">Email id:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br><br>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h3>Submitted Users:</h3>
+    <button onclick="fetchSubmittedUsers()">Show Submitted Users</button>
+    
+    <div id="usersContainer"></div> <!-- This will display the list of registered users -->
+
+</body>
+</html>
