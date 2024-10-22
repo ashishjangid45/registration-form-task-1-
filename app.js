@@ -17,10 +17,24 @@ app.get('/', (req, res) => {
 // Route to handle form submission
 app.post('/register', (req, res) => {
     const { firstName, lastName, mobile, email, password, city, state,street,country,address,loginId} = req.body;
-    
-    if (!loginId) {
-        return res.status(400).json({ message: 'Login ID is required.' });
-    }
+
+     // Validate loginId: Must be a combination of letters and numbers, or only letters
+     const loginIdRegex =  /^(?=.*[A-Za-z])[A-Za-z0-9]{5,10}$/;
+     if (!loginIdRegex.test(loginId)) {
+         return res.status(400).json({ message: 'Login ID must be 5 to 12 characters long and contain at least one letter. It cannot be only numbers.' });
+     }
+ 
+     // Validate password: Length between 7 and 12, and allow only letters, numbers, and the '@' character
+     const passwordRegex = /^[A-Za-z0-9@]{7,12}$/;
+     if (!passwordRegex.test(password)) {
+         return res.status(400).json({ message: 'Password must be between 7 and 12 characters, containing only letters, numbers, and the @ symbol.' });
+     }
+ 
+     // Check if email has already been registered
+     const emailExists = users.some(user => user.email === email);
+     if (emailExists) {
+         return res.status(400).json({ message: 'Email is already registered. Please use another email.' });
+     }
 
     // Name and city/state validation: only alphabets allowed
     const nameRegex = /^[a-zA-Z\s]+$/;
@@ -36,15 +50,11 @@ app.post('/register', (req, res) => {
 
      // Login ID validation: allow letters and numbers only
      if (!/^[a-zA-Z0-9]+$/.test(loginId)) {
-        alert('Login ID must contain only letters and numbers.');
+        alert('Login ID must be 5 to 12 characters long and contain at least one letter. It cannot be only numbers.');
         return; // Stop form submission if validation fails
     }
 
-    // Password validation: no special characters allowed
-    const passwordRegex = /^[a-zA-Z0-9@]+$/;
-    if (!passwordRegex.test(password)) {
-        return res.status(400).json({ message: 'Password must not contain special characters.' });
-    }
+    
 
     // Email validation: valid email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
