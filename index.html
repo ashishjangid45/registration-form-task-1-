@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
     <script>
+          function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const toggleButton = document.getElementById('togglePassword');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleButton.textContent = 'Hide Password';
+            } else {
+                passwordField.type = 'password';
+                toggleButton.textContent = 'Show Password';
+            }
+        }
         // Function to submit form data via fetch (AJAX)
         function submitForm(event) {
             event.preventDefault();
@@ -52,7 +64,7 @@
             }
            
             if (!nameRegex.test(loginID)) {
-                alert('loginID must contain only letters and numbers.');
+                alert('Login ID must be 5 to 12 characters long and contain at least one letter. It cannot be only numbers.');
                 return; // Stop form submission if validation fails
             }
 
@@ -182,13 +194,18 @@
         <label for="country">Country:</label>
         <input type="text" id="country" name="country" required><br><br>
 
-        <label for="loginId">Login ID:</label>
+        <!-- <label for="loginId">Login ID:</label>
         <input type="text" id="loginId" name="loginId" required><br><br>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
 
-       
+        -->
+        <label for="loginId">Login ID:</label>
+        <input type="text" id="loginId" name="loginId" pattern="[A-Za-z0-9]{5,12}" title="Login ID must be 5 to 12 characters long and contain at least one letter. It cannot be only numbers." required><br><br>
+    
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" minlength="7" maxlength="12" title="Password must be between 7-12 characters." required><br><br>
 
 
         <button type="submit">Submit</button>
