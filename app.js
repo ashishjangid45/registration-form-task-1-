@@ -16,18 +16,28 @@ app.get('/', (req, res) => {
 
 // Route to handle form submission
 app.post('/register', (req, res) => {
-    const { firstName, lastName, mobile, email, password, city, state } = req.body;
+    const { firstName, lastName, mobile, email, password, city, state,street,country,address,loginId} = req.body;
+    
+    if (!loginId) {
+        return res.status(400).json({ message: 'Login ID is required.' });
+    }
 
     // Name and city/state validation: only alphabets allowed
     const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!nameRegex.test(firstName) || !nameRegex.test(lastName) || !nameRegex.test(city) || !nameRegex.test(state)) {
-        return res.status(400).json({ message: 'Name, City, and State must contain only letters and spaces.' });
+    if (!nameRegex.test(firstName) || !nameRegex.test(lastName) || !nameRegex.test(city) || !nameRegex.test(country) || !nameRegex.test(street) || !nameRegex.test(state)) {
+        return res.status(400).json({ message: 'Name, City, street,country and State must contain only letters and spaces.' });
     }
 
     // Mobile number validation: exactly 10 digits
     const mobileRegex = /^\d{10}$/;
     if (!mobileRegex.test(mobile)) {
         return res.status(400).json({ message: 'Invalid mobile number. It must be exactly 10 digits.' });
+    }
+
+     // Login ID validation: allow letters and numbers only
+     if (!/^[a-zA-Z0-9]+$/.test(loginId)) {
+        alert('Login ID must contain only letters and numbers.');
+        return; // Stop form submission if validation fails
     }
 
     // Password validation: no special characters allowed
@@ -43,7 +53,7 @@ app.post('/register', (req, res) => {
     }
 
     // If all validations pass, add the user to the users array
-    users.push({ firstName, lastName, mobile, email, password, city, state });
+    users.push({ firstName, lastName, mobile, email, address,street,country,loginId, password, city, state });
 
     res.send({ message: 'User registered successfully!' });
 });
