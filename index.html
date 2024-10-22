@@ -15,9 +15,14 @@
             const lastName = formData.get('lastName');
             const mobile = formData.get('mobile');
             const email = formData.get('email');
-            const password = formData.get('password');
+            const address= formData.get('address');
+            const street = formData.get('street');
             const city = formData.get('city');
             const state = formData.get('state');
+            const country = formData.get('country');
+            const loginID = formData.get('loginID');
+            const password = formData.get('password');
+           
 
             // Name and city/state validation: only alphabets allowed
             const nameRegex = /^[a-zA-Z\s]+$/;
@@ -37,6 +42,20 @@
                 alert('State must contain only letters and spaces.');
                 return; // Stop form submission if validation fails
             }
+            if (!nameRegex.test(country)) {
+                alert('country must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+            if (!nameRegex.test(street)) {
+                alert('street must contain only letters and spaces.');
+                return; // Stop form submission if validation fails
+            }
+           
+            if (!nameRegex.test(loginID)) {
+                alert('loginID must contain only letters and numbers.');
+                return; // Stop form submission if validation fails
+            }
+
 
             // Mobile number validation: must be exactly 10 digits
             const mobileRegex = /^\d{10}$/;
@@ -96,8 +115,13 @@
                                     <p><strong>Last Name:</strong> ${user.lastName}</p>
                                     <p><strong>Mobile:</strong> ${user.mobile}</p>
                                     <p><strong>Email:</strong> ${user.email}</p>
+                                     <p><strong>address:</strong> ${user.address}</p>
+                                      <p><strong>street:</strong> ${user.street}</p>
                                     <p><strong>City:</strong> ${user.city}</p>
                                     <p><strong>State:</strong> ${user.state}</p>
+                                     <p><strong>country:</strong> ${user.country}</p>
+                                   
+
                                 </div><hr>`;
                         });
                     }
@@ -142,14 +166,30 @@
         <label for="email">Email id:</label>
         <input type="email" id="email" name="email" required><br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <label for="street">Street:</label>
+        <input type="text" id="street" name="street" required><br><br>
 
         <label for="city">City:</label>
         <input type="text" id="city" name="city" required><br><br>
 
+        
         <label for="state">State:</label>
         <input type="text" id="state" name="state" required><br><br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required><br><br>
+
+        <label for="loginId">Login ID:</label>
+        <input type="text" id="loginId" name="loginId" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+       
+
 
         <button type="submit">Submit</button>
     </form>
